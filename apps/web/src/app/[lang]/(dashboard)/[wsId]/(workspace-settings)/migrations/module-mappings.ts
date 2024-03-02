@@ -1,5 +1,3 @@
-import { generateUUID } from '@/utils/uuid-helper';
-
 //* EXTERNAL MAPPING
 
 export const billCouponsMapping = (_: string, data: any[]) =>
@@ -54,7 +52,6 @@ export const billsMapping = (wsId: string, data: any[]) =>
 
     return {
       id: i?.id,
-      transaction_id: generateUUID(i?.id, walletId),
       wallet_id: walletId,
       price: i?.total,
       total_diff: i?.price_diff,
@@ -226,11 +223,33 @@ export const userCouponsMapping = (_: string, data: any[]) =>
     created_at: i?.created_at,
   }));
 
-export const userMonthlyReportLogsMapping = (_: string, data: any[]) => data;
+export const userMonthlyReportLogsMapping = (_: string, data: any[]) =>
+  data.map(() => ({}));
 
-export const userMonthlyReportsMapping = (_: string, data: any[]) => data;
+export const userMonthlyReportsMapping = (_: string, data: any[]) =>
+  data.map((i) => ({
+    id: i?.id,
+    user_id: i?.user_id,
+    group_id: i?.class_id,
+    title: i?.title,
+    content: i?.learned_lessons,
+    feedback: i?.feedback,
+    score: i?.score,
+    scores: i?.scores,
+    creator_id: i?.creator_id,
+    created_at: i?.created_at,
+    updated_at: i?.updated_at,
+  }));
 
-export const userStatusChangesMapping = (_: string, data: any[]) => data;
+export const userStatusChangesMapping = (wsId: string, data: any[]) =>
+  data.map((i) => ({
+    user_id: i?.user_id,
+    ws_id: wsId,
+    archived: i?.status === 'PERM_OFF' || i?.status === 'TEMP_OFF',
+    archived_until: i?.off_until,
+    creator_id: i?.creator_id,
+    created_at: i?.created_at,
+  }));
 
 export const usersMapping = (wsId: string, data: any[]) =>
   data.map((i) => ({
